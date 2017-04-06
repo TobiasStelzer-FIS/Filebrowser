@@ -4,8 +4,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 
 import com.sap.ecm.api.EcmService;
@@ -17,14 +20,29 @@ public class ObjectAdapter {
 	private static final String REPOSITORY_NAME = "de.fisgmbh.tgh.applman";
 	private static final String REPOSITORY_SECRET = "de.fisgmbh.tgh.applman.tzfouhuw8kbqfgs7b1zvjku6fjk54lujsnty58d2p";
 	
+	private static Session repository = null;
+	
 	private String id;
 	
 	public ObjectAdapter(String id) {
 		this.id = id;
 	}
 	
-	public void delete() {
+	public void delete() throws ServletException {
+		Session repository = ObjectAdapter.getSession();
+		CmisObject obj = repository.getObject(this.getId());
 		
+		try {
+			Folder f = (Folder)obj;
+			f.deleteTree(true, UnfileObject.DELETE, true);
+		} catch (ClassCastException e1) {
+			try {
+				Document d = (Document)obj;
+				d.deleteAllVersions();
+			} catch (ClassCastException e2) {
+				throw new ServletException("Error. CmisObject can't be deleted. It's neither a Folder nor a Document");
+			}
+		}
 	}
 	
 	public String getId() {
@@ -36,6 +54,13 @@ public class ObjectAdapter {
 	}
 	
 	public static Session getSession() throws ServletException {
+		if (repository == null) {
+			repository = createSession();
+		}
+		return repository;
+	}
+	
+	private static Session createSession() throws ServletException {
 		// Use a unique name with package semantics
 		String uniqueName = REPOSITORY_NAME;
 		// Use a secret key only known to your application (min. 10 chars)

@@ -92,7 +92,7 @@ public class ServletFilebrowser extends HttpServlet {
 				fa = new FolderAdapter(id);
 			}
 			
-			String jsonResponse = fa.getFolderInfoAsJson();
+			String jsonResponse = fa.getNavigationInfo();
 			try {				
 				response.getOutputStream().print(jsonResponse);
 				response.setStatus(HttpServletResponse.SC_OK);
@@ -140,7 +140,7 @@ public class ServletFilebrowser extends HttpServlet {
 		case "hierarchy":
 			try {
 				fa = FolderAdapter.getRootAdapter();
-				jsonResponse = fa.getHierarchyAsJson();
+				jsonResponse = fa.getHierarchy();
 				response.getOutputStream().print(jsonResponse);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (IOException e) {

@@ -18,6 +18,21 @@ public class DocumentAdapter extends ObjectAdapter {
 		return builder.toString();
 	}
 	
+	public static String getDocumentInfo(Document document) throws ServletException {
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append("{");
+		builder.append("\"Name\": \"" + document.getName() + "\"");
+		builder.append(",\"Id\": \"" + document.getId() + "\"");
+		builder.append(",\"Type\": \"Document\"");
+		builder.append(",\"Filetype\": \"" + document.getContentStreamMimeType() + "\"");
+		builder.append(",\"Filesize\": \"" + document.getContentStreamLength() + "\"");
+		builder.append(",\"Last Modification\": \"" + document.getLastModificationDate().getTimeInMillis() + "\"");
+		builder.append("}");
+		
+		return builder.toString();
+	}
+	
 	public ContentStream getContentStream() throws ServletException {
 		try {
 			Session repository = ObjectAdapter.getSession();
