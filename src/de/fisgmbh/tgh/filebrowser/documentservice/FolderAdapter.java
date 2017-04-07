@@ -2,6 +2,7 @@ package de.fisgmbh.tgh.filebrowser.documentservice;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class FolderAdapter extends ObjectAdapter {
 		return builder.toString();
 	}
 	
-	public static String getFolderInfo(Folder folder, boolean includeChildren) throws ServletException{
+	public static String getFolderInfo(Folder folder, boolean includeNavigationData) throws ServletException{
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("{");
@@ -89,33 +90,64 @@ public class FolderAdapter extends ObjectAdapter {
 		builder.append(",\"Id\": \"" + folder.getId() + "\"");
 		builder.append(",\"Type\": \"Folder\"");
 		
-		if (includeChildren) {
-			builder.append(",\"Children\": [");
-			
-			boolean isFirst = true;
-			for (CmisObject child : folder.getChildren()) {
-				if (!isFirst) 
-					builder.append(",");
-				
-				try {
-					Folder f = (Folder)child;
-					builder.append(FolderAdapter.getFolderInfo(f, false));
-				} catch (ClassCastException e) {
-					Document d = (Document)child;
-					builder.append(DocumentAdapter.getDocumentInfo(d));
-				}
-				
-				isFirst = false;
-			}
-			
-			builder.append("]");
+		if (includeNavigationData) {
+			builder.append(",\"Parents\": " + getParentData(folder));
+			builder.append(",\"Children\": " + getChildrenData(folder));
 		}
 		
 		builder.append("}");
 		
 		return builder.toString();
 	}
+	
+	public static String getParentData(Folder folder) throws ServletException {
+		StringBuilder builder = new StringBuilder();
 		
+		List<Folder> parents = new ArrayList<Folder>();
+		Folder parent = folder.getFolderParent();
+		while (parent != null) {
+			parents.add(parent);
+			parent = parent.getFolderParent();
+		}
+		// Parents-List is in wrong order (e.g. "Level2 / Level1 / root")
+		Collections.reverse(parents);
+		
+		builder.append("[");
+		for (int i = 0; i < parents.size(); i++) {
+			if (i != 0)
+				builder.append(",");
+			
+			builder.append(getFolderInfo(parents.get(i), false));
+		}
+		builder.append("]");
+		
+		return builder.toString();
+	}
+	
+	public static String getChildrenData(Folder folder) throws ServletException {
+		StringBuilder builder = new StringBuilder();
+		
+		boolean isFirst = true;
+		builder.append("[");
+		for (CmisObject child : folder.getChildren()) {
+			if (!isFirst) 
+				builder.append(",");
+			
+			try {
+				Folder f = (Folder)child;
+				builder.append(FolderAdapter.getFolderInfo(f, false));
+			} catch (ClassCastException e) {
+				Document d = (Document)child;
+				builder.append(DocumentAdapter.getDocumentInfo(d));
+			}
+			
+			isFirst = false;
+		}
+		builder.append("]");
+		
+		return builder.toString();
+	}
+	
 	private String recursiveHierarchy(Folder folder, Session repository) {
 		StringBuilder builder = new StringBuilder();
 		
@@ -148,9 +180,12 @@ public class FolderAdapter extends ObjectAdapter {
 			Folder folder = (Folder)repository.getObject(this.getId());
 			builder.append("{");
 			builder.append("\"Hierarchy\": ");
+			builder.append("{");
+			builder.append("\"root\":");
 			
 			builder.append(recursiveHierarchy(folder, repository));
 			
+			builder.append("}");
 			builder.append("}");
 		} catch (ClassCastException e) {
 			throw new ServletException("Error. You can only navigate to folders");
