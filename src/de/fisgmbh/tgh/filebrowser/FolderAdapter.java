@@ -1,4 +1,4 @@
-package de.fisgmbh.tgh.filebrowser.documentservice;
+package de.fisgmbh.tgh.filebrowser;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -55,14 +55,18 @@ public class FolderAdapter extends ObjectAdapter {
 			Folder parentFolder = (Folder)repository.getObject(this.getId());
 			
 			ContentStream contentStream = repository.getObjectFactory().createContentStream(name, -1, "application/octet-stream", content);
-			Document newDocument = parentFolder.createDocument(new HashMap<String, Object>(), contentStream, VersioningState.NONE);
+			
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
+			properties.put(PropertyIds.NAME, name);
+			Document newDocument = parentFolder.createDocument(properties, contentStream, VersioningState.NONE);
 			
 			return new DocumentAdapter(newDocument.getId());
 		} catch (ClassCastException e) {
 			throw new ServletException("Error. You have to provide a valid ID of a Folder");
 		}
 	}
-	
+
 	public String getNavigationInfo() throws ServletException {
 		StringBuilder builder = new StringBuilder();
 		Session repository = ObjectAdapter.getSession();

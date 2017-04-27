@@ -1,4 +1,4 @@
-package de.fisgmbh.tgh.filebrowser.documentservice;
+package de.fisgmbh.tgh.filebrowser;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

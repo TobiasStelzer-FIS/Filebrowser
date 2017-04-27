@@ -1,4 +1,4 @@
-package de.fisgmbh.tgh.filebrowser.documentservice;
+package de.fisgmbh.tgh.filebrowser;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
