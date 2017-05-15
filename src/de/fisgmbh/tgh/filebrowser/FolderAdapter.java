@@ -92,6 +92,7 @@ public class FolderAdapter extends ObjectAdapter {
 		builder.append("{");
 		builder.append("\"Name\": \"" + folder.getName() + "\"");
 		builder.append(",\"Id\": \"" + folder.getId() + "\"");
+		builder.append(",\"CreatedBy\": \"" + folder.getCreatedBy() + "\"");
 		builder.append(",\"Type\": \"Folder\"");
 		
 		if (includeNavigationData) {
@@ -158,6 +159,7 @@ public class FolderAdapter extends ObjectAdapter {
 		builder.append("{");
 		builder.append("\"Name\": \"" + folder.getName() + "\"");
 		builder.append(",\"Id\": \"" + folder.getId() + "\"");
+		builder.append(",\"CreatedBy\": \"" + folder.getCreatedBy() + "\"");
 		builder.append(",\"Type\": \"Folder\"");
 		builder.append(",\"Children\": [");
 		

@@ -24,6 +24,7 @@ public class DocumentAdapter extends ObjectAdapter {
 		builder.append("{");
 		builder.append("\"Name\": \"" + document.getName() + "\"");
 		builder.append(",\"Id\": \"" + document.getId() + "\"");
+		builder.append(",\"CreatedBy\": \"" + document.getCreatedBy() + "\"");
 		builder.append(",\"Type\": \"Document\"");
 		builder.append(",\"Filetype\": \"" + document.getContentStreamMimeType() + "\"");
 		builder.append(",\"Filesize\": \"" + document.getContentStreamLength() + "\"");
