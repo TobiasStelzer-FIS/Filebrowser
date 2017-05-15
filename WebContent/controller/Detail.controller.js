@@ -17,7 +17,7 @@ sap.ui.define([
 			/* =========================================================== */
 
 			onInit : function () {
-
+				
 				this.getModel("contentModel").attachEvent("requestCompleted", function(oEvent) {
 					
 					if (!oEvent.getParameter("success")) {
@@ -72,6 +72,7 @@ sap.ui.define([
 				var oBindingContext = oSource.getBindingContext("contentModel");
 				var sId = oBindingContext.getProperty("Id");
 
+				//this.getOwnerComponent().oListSelector.selectItemById(sId);
 				this._loadFolder(sId);
 			},
 
@@ -122,7 +123,7 @@ sap.ui.define([
 				
 				$.ajax({
 					 type: "GET",
-					 url: "/backend/filebrowser?action=createfolder&parentid=" + sId + "&name=" + sFolderName,
+					 url: this.getOwnerComponent().sRootPath + "filebrowser?action=createfolder&parentid=" + sId + "&name=" + sFolderName,
 					 data: {}
 				}).always(function () {
 					this._reloadFolderContent();
@@ -141,6 +142,7 @@ sap.ui.define([
 				sData += "parentid:" + this._getSelectedFolderId();
 
 				oFileUploader.setAdditionalData(sData);
+				oFileUploader.setUploadUrl(this.getOwnerComponent().sRootPath + "filebrowser");
 				oFileUploader.attachEvent("uploadComplete", function () {
 					this._reloadFolderContent();
 					this._reloadHierarchy();
@@ -165,12 +167,12 @@ sap.ui.define([
 			},
 
 			_loadFolder : function (sId) {
-				this.getModel("contentModel").loadData("/backend/filebrowser?action=navigate&id=" + sId);
+				this.getModel("contentModel").loadData(this.getOwnerComponent().sRootPath + "filebrowser?action=navigate&id=" + sId);
 				this.getModel("detailView").setProperty("/busy", true);
 			},
 			
 			_loadDocument : function (sId) {
-				window.open("/backend/filebrowser/" + sId, '_blank');
+				window.open(this.getOwnerComponent().sRootPath + "filebrowser/" + sId, '_blank');
 			},
 			
 			_reloadFolderContent : function () {
@@ -180,14 +182,14 @@ sap.ui.define([
 			},
 			
 			_reloadHierarchy : function () {
-				this.getModel("hierarchyModel").loadData("/backend/filebrowser?action=hierarchy");
+				this.getModel("hierarchyModel").loadData(this.getOwnerComponent().sRootPath + "filebrowser?action=hierarchy");
 				this.getModel("masterView").setProperty("/busy", true);
 			},
 			
 			_deleteItem : function (sId, bReloadHierarchy) {
 				$.ajax({
 					 type: "GET",
-					 url: "/backend/filebrowser?action=delete&id=" + sId,
+					 url: this.getOwnerComponent().sRootPath + "filebrowser?action=delete&id=" + sId,
 					 data: {}
 				}).always(function () {
 					this._reloadFolderContent();
@@ -261,12 +263,12 @@ sap.ui.define([
 
 				var sPath = oElementBinding.getPath(),
 					oResourceBundle = this.getResourceBundle(),
-					oObject = oView.getModel().getObject(sPath),
+					oObject = oView.getModel().getObject(this.sRootPath),
 					sObjectId = oObject.ApplicantId,
 					sObjectName = oObject.Lastname,
 					oViewModel = this.getModel("detailView");
 
-				this.getOwnerComponent().oListSelector.selectAListItem(sPath);
+				this.getOwnerComponent().oListSelector.selectAListItem(this.sRootPath);
 
 				oViewModel.setProperty("/shareSendEmailSubject",
 					oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));

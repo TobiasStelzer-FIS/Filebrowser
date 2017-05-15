@@ -10,7 +10,6 @@
 					<u:FileUploader id="fileUploader"
 								name="fileUploader"
 								value="{detailView>/valueFileUploader}"
-								uploadUrl="/backend/filebrowser"
 								multiple="false"
 								uploadComplete="onUploadFileComplete">
 					</u:FileUploader>
@@ -18,7 +17,7 @@
 			</form:FormContainer>
 		</form:Form>
 		<buttons>
-			<Button id="btnUploadDocumentSave" text="{i18n>detailSaveButton}" press="onUploadDocumentSave"/>
+			<Button id="btnUploadDocumentSave" text="{i18n>detailUploadButton}" press="onUploadDocumentSave"/>
 			<Button id="btnUploadDocumentCancel" text="{i18n>detailCancelButton}" press="onDialogCancel"/>
 		</buttons>
 	</Dialog>
