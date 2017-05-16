@@ -33,6 +33,7 @@ sap.ui.define([
 					//}
 					this.getModel("detailView").setProperty("/busy", false);
 				}, this);
+				//this.getRouter().getTargets().display("detailNoObjectSelected");
 				this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
 			},
 
@@ -263,12 +264,12 @@ sap.ui.define([
 
 				var sPath = oElementBinding.getPath(),
 					oResourceBundle = this.getResourceBundle(),
-					oObject = oView.getModel().getObject(this.sRootPath),
+					oObject = oView.getModel().getObject(this.sPath),
 					sObjectId = oObject.ApplicantId,
 					sObjectName = oObject.Lastname,
 					oViewModel = this.getModel("detailView");
 
-				this.getOwnerComponent().oListSelector.selectAListItem(this.sRootPath);
+				this.getOwnerComponent().oListSelector.selectAListItem(this.sPath);
 
 				oViewModel.setProperty("/shareSendEmailSubject",
 					oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
