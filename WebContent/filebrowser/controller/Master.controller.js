@@ -43,7 +43,7 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 			}, this);
 
 			hierarchyModel.loadData(this.getOwnerComponent().sRootPath
-					+ "filebrowser?action=hierarchy");
+					+ "browse?action=hierarchy");
 
 			// keeps the filter and search state
 			this._oListFilterState = {
@@ -88,7 +88,7 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 */
 		onRefresh : function() {
 			this.getModel("hierarchyModel").loadData(
-					this.getOwnerComponent().sRootPath + "filebrowser?action=hierarchy");
+					this.getOwnerComponent().sRootPath + "browse?action=hierarchy");
 			this.getModel("masterView").setProperty("/busy", true);
 		},
 

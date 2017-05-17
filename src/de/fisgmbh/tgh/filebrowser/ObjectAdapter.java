@@ -78,6 +78,9 @@ public class ObjectAdapter {
 			// connect to my repository
 			openCmisSession = ecmSvc.connect(uniqueName, secretKey);
 		} catch (CmisObjectNotFoundException e) {
+			throw new ServletException("Couldn't connect to the repository."
+					+ " Maybe the credentials are wrong or the repository doesn't exist or the service is currently not available.");
+			/*
 			// repository does not exist, so try to create it
 			RepositoryOptions options = new RepositoryOptions();
 			options.setUniqueName(uniqueName);
@@ -86,6 +89,7 @@ public class ObjectAdapter {
 			ecmSvc.createRepository(options);
 			// should be created now, so connect to it
 			openCmisSession = ecmSvc.connect(uniqueName, secretKey);
+			*/
 		}
 		return openCmisSession;
 	}

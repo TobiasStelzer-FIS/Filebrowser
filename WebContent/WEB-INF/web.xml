@@ -39,7 +39,7 @@
 
 	<servlet-mapping>
 		<servlet-name>ServletFilebrowser</servlet-name>
-		<url-pattern>/filebrowser/*</url-pattern>
+		<url-pattern>/browse/*</url-pattern>
 	</servlet-mapping>
 
 	<resource-ref>
