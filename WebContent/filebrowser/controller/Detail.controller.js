@@ -124,7 +124,7 @@ sap.ui.define([
 				
 				$.ajax({
 					 type: "GET",
-					 url: this.getOwnerComponent().sRootPath + "browse?action=createfolder&parentid=" + sId + "&name=" + sFolderName,
+					 url: this.getOwnerComponent().sRootPath + "?action=createfolder&parentid=" + sId + "&name=" + sFolderName,
 					 data: {}
 				}).always(function () {
 					this._reloadFolderContent();
@@ -143,7 +143,7 @@ sap.ui.define([
 				sData += "parentid:" + this._getSelectedFolderId();
 
 				oFileUploader.setAdditionalData(sData);
-				oFileUploader.setUploadUrl(this.getOwnerComponent().sRootPath + "browse");
+				oFileUploader.setUploadUrl(this.getOwnerComponent().sRootPath);
 				oFileUploader.attachEvent("uploadComplete", function () {
 					this._reloadFolderContent();
 					this._reloadHierarchy();
@@ -168,12 +168,12 @@ sap.ui.define([
 			},
 
 			_loadFolder : function (sId) {
-				this.getModel("contentModel").loadData(this.getOwnerComponent().sRootPath + "browse?action=navigate&id=" + sId);
+				this.getModel("contentModel").loadData(this.getOwnerComponent().sRootPath + "?action=navigate&id=" + sId);
 				this.getModel("detailView").setProperty("/busy", true);
 			},
 			
 			_loadDocument : function (sId) {
-				window.open(this.getOwnerComponent().sRootPath + "browse/" + sId, '_blank');
+				window.open(this.getOwnerComponent().sRootPath + "/" + sId, '_blank');
 			},
 			
 			_reloadFolderContent : function () {
@@ -183,14 +183,14 @@ sap.ui.define([
 			},
 			
 			_reloadHierarchy : function () {
-				this.getModel("hierarchyModel").loadData(this.getOwnerComponent().sRootPath + "browse?action=hierarchy");
+				this.getModel("hierarchyModel").loadData(this.getOwnerComponent().sRootPath + "?action=hierarchy");
 				this.getModel("masterView").setProperty("/busy", true);
 			},
 			
 			_deleteItem : function (sId, bReloadHierarchy) {
 				$.ajax({
 					 type: "GET",
-					 url: this.getOwnerComponent().sRootPath + "browse?action=delete&id=" + sId,
+					 url: this.getOwnerComponent().sRootPath + "?action=delete&id=" + sId,
 					 data: {}
 				}).always(function () {
 					this._reloadFolderContent();

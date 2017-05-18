@@ -171,6 +171,14 @@ public class ServletFilebrowser extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_OK);
 			break;
 
+		case "rename":
+			id = request.getParameter("id");
+			String newName = request.getParameter("name");
+			oa = new ObjectAdapter(id);
+			oa.rename(newName);
+			response.setStatus(HttpServletResponse.SC_OK);
+			break;
+			
 		case "createfolder":
 			String parentid = request.getParameter("parentid");
 			String name = request.getParameter("name");

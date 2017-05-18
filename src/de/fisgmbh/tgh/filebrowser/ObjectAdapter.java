@@ -30,7 +30,13 @@ public class ObjectAdapter {
 	
 	public void delete() throws ServletException {
 		Session repository = ObjectAdapter.getSession();
-		CmisObject obj = repository.getObject(this.getId());
+		CmisObject obj;
+		
+		try {
+			obj = repository.getObject(this.getId());
+		} catch (CmisObjectNotFoundException e) {
+			throw new ServletException("Error. The Object you want to delete does not exist.");
+		}
 		
 		try {
 			Folder f = (Folder)obj;
@@ -42,6 +48,17 @@ public class ObjectAdapter {
 			} catch (ClassCastException e2) {
 				throw new ServletException("Error. CmisObject can't be deleted. It's neither a Folder nor a Document");
 			}
+		}
+	}
+	
+	public void rename(String newName) throws ServletException {
+		Session repository = ObjectAdapter.getSession();
+		
+		try {
+			CmisObject obj = repository.getObject(this.getId());
+			obj.rename(newName);
+		} catch (CmisObjectNotFoundException e) {
+			throw new ServletException("Error. The Object you want to rename does not exist.");
 		}
 	}
 	

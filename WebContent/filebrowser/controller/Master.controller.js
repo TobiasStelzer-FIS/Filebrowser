@@ -36,14 +36,14 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 				oTree.expandToLevel(1);
 				oViewModel.setProperty("/busy", false);
 				var oItem = oTree.getItems()[0];
-				//oTree.setSelectedItem(oItem, true, true);
-				//this._showDetail(oItem);
+				// oTree.setSelectedItem(oItem, true, true);
+				// this._showDetail(oItem);
 				var oBinding = oTree.getBinding("items");
 				oBinding.attachEvent("change", this.onUpdateFinished, this);
 			}, this);
 
 			hierarchyModel.loadData(this.getOwnerComponent().sRootPath
-					+ "browse?action=hierarchy");
+					+ "?action=hierarchy");
 
 			// keeps the filter and search state
 			this._oListFilterState = {
@@ -88,7 +88,7 @@ sap.ui.define([ "de/fis/filebrowser/controller/BaseController",
 		 */
 		onRefresh : function() {
 			this.getModel("hierarchyModel").loadData(
-					this.getOwnerComponent().sRootPath + "browse?action=hierarchy");
+					this.getOwnerComponent().sRootPath + "?action=hierarchy");
 			this.getModel("masterView").setProperty("/busy", true);
 		},
 
