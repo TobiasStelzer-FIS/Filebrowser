@@ -28,7 +28,7 @@
 
 	<servlet>
 		<servlet-name>ServletFilebrowser</servlet-name>
-		<servlet-class>de.fisgmbh.tgh.filebrowser.documentservice.ServletFilebrowser</servlet-class>
+		<servlet-class>de.fisgmbh.tgh.filebrowser.ServletFilebrowser</servlet-class>
 		<multipart-config>
 			<location>/tmp</location>
 			<max-file-size>5242880</max-file-size><!--5MB -->
