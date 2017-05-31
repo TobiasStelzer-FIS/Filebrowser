@@ -58,7 +58,14 @@ public class ObjectAdapterTest {
 
 	@Test
 	public void testGetSession() {
-		fail("Not yet implemented");		
+		try {
+			Session session = ObjectAdapter.getSession();
+			Assert.assertNotNull(session);
+		} catch (ServletException e) {
+			Assert.fail("ServletException was thrown when trying to get a session to the documentservice.");
+			e.printStackTrace();
+		}
+		
 	}
 
 }
