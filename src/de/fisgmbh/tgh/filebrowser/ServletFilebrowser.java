@@ -17,9 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
-import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
+
+import de.fisgmbh.tgh.filebrowser.test.CustomRunListener;
+import de.fisgmbh.tgh.filebrowser.test.DocumentAdapterTest;
+import de.fisgmbh.tgh.filebrowser.test.FolderAdapterTest;
+import de.fisgmbh.tgh.filebrowser.test.ObjectAdapterTest;
 
 /*
 @WebServlet(
@@ -204,14 +208,16 @@ public class ServletFilebrowser extends HttpServlet {
 			break;
 
 		case "test":
-			JUnitCore junit = new JUnitCore();
-			Result result = junit.run(ObjectAdapterTest.class);
 			try {
-				response.getWriter().write(result.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}			
-			
+				JUnitCore junit = new JUnitCore();
+				junit.addListener(new CustomRunListener(response.getWriter()));
+				Result result = junit.run(ObjectAdapterTest.class, FolderAdapterTest.class, DocumentAdapterTest.class);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			break;
+
 		default:
 			throw new ServletException("Error. Invalid value for 'action'-Parameter");
 		}
